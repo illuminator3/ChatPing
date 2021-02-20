@@ -1,0 +1,51 @@
+import kr.entree.spigradle.kotlin.*
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'net.minecrell.plugin-yml.bukkit' version '0.3.0'
+    id 'kr.entree.spigradle' version '2.2.3'
+}
+
+group 'me.illuminator3'
+version '0.1'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+shadowJar {
+    //noinspection GrDeprecatedAPIUsage
+    classifier = null // remove the nasty '-all' from the jar
+
+    minimize() // minimize the jar
+
+    configurations = [project.configurations.compile]
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.jetbrains.kotlin:kotlin-stdlib'
+    compileOnly spigot()
+}
+
+bukkit {
+    name = 'ChatPing'
+    version = '0.1'
+    author = 'illuminator3'
+    main = 'me.illuminator3.chatping.ChatPing'
+    load = 'STARTUP'
+}
